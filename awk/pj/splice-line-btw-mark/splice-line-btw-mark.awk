@@ -5,8 +5,8 @@ BEGIN {
     if ( $3 == "start")  output="true"
     if ( $3 == "end")  output="false"
 }
-/^[^\/\* module ]/ {
-    if ( output=="true") print $0
+{
+    if ( $0 !~ "/* module" && output == "true" ) print $0
 }
 END {
     print "- - - end - - -"
