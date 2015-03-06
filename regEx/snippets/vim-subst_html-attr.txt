@@ -1,0 +1,3 @@
+
+Use this to weed out reactjs attribute
+%s/data-reactid="[^"]*"//gc
