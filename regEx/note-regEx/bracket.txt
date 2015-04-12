@@ -1,40 +1,15 @@
 ----------------------------------------------------------
 
-dot ( Wild card )
------------------
-
-    Match any character except the new line.
-
-    Note about matching new line character:
-
-        Consider the following 3 lines of text:
-
-            This is the first line MATCH MATCH
-            This is the second line MATCH MATCH
-            This is the last line MATCH MATCH
-
-        Despite that there is an end of line charector,
-        /MATCH./ will not match the "MATCH" at end of line.
-        However, if you turn on "Single-line" mode the second
-        "MATCH" at the end of lines will be matched.
-
-        ( in awk, /./ does match new line )
-
-    Different between Unix shell and regEx's wild card:
-
-        The shell's wild card "*" match any number of
-        charactors.
-
-        regEx wild card "." match only match one charactor
-        The equivalent of shell's "*" in regEx is /.*/.
-
 Bracket (Class)
 --------------
 
-  • Bracket notation is used to enclose a list or set
+  • A Bracket pair "[]" is a class, and it match a single position.
+
+  • Bracket pair "[]" is used to enclose a list (or set)
     of posible characters to be match at a single position.
 
-    This syntax is similar to shell's glob-pattern for filename.
+    Syntax for bracket notation is similar to shell's glob-pattern
+    for filename, for example:
 
         $ grep '\.H[123]' ch0[12].html
                    ^^^^^     ^^^^
@@ -48,34 +23,80 @@ Bracket (Class)
             ch02:.H1 "Getting Started"
                ^   ^
 
-        [!] note that you have to put regEx in quote so
-            that is is passed to grep un interpreted by the
-            shell.
+        [!] note that when issue a comman in shell you have
+            to put regEx in quote so that is is passed to grep un interpreted
+            by the shell.
 
-  • Similar to glob-pattern in shell, meta character
-    losses it meaning in bracket with the exception of:
+  • Meta character losses it meaning inside bracket with the exception of:
 
-        "^"
-        "-"
-        "\"  (awk only)
+        "^": Circumflex occurs in the first position.
+        "-": Dash occurs in the first position.
+        "\": Backslash (awk only)
 
-        Example:
+    For example, the following matches <anyChar>.<anyChar>:
 
-            /.[.]./  # match <anyChar>.<anyChar>
+          /.[.]./
 
-            /[]]/   # match "]", first close bracket become member
-                      of the class
+    Close bracket "]" is an indication that the class has ended; however,
+    if it occurs as the first character in the class or if it occurs
+    after the first circumflex in the class, it becomes a member
+    of the class:
 
-    Hyphen (range of characters)
+        /[]]/    # match "]", because close bracket is inside bracket pair
+                   and thus become a member of the class
+        /[^]]/   # match everything except "]"
 
-        Allow you to specify a range of characters.
+    In both case above, the first "]" does not indicate the end of class.
+
+    Hyphen "-" is used to indicate range; but if it occurs as
+    the first or last character in the class it is a member of
+    class and thus taken literally as "-". Therefore, if you need to match
+    a dash you have to place it immediately after open bracket like
+    "[-" or before closing bracket like "-]"
+
+    [! awk only]
+
+        When using awk, backslash "\" maintains its meta meaning inside
+        a class. So if you need to match "-" or "]", you don't have to place
+        it as the first or last item inside bracket:
+
+            /[A-Z\-\]a-z]/  # match all upper and lower case alpabet
+                            # as well as "-" and "]"
+
+
+  • Hyphen (range of characters)
+
+        Hyphen allow you to specify a range of characters.
 
         [!] Range [A-z] matches both uppercase and lowercase letters, but
             it also matches the six characters that fall between uppercase
-            and lowercase letters in the ASCII chart:  [ \ ] ^ _'
+            and lowercase letters in the ASCII chart:  [ \ ] ^ _ '
 
         [!] Range can be very messy when working with non-ASCII character
-            set or non English language.
+            set or non English language. For complex situation use POSIX standard
+            instead of range.
+
+
+
+  • Circumflex (^)
+
+        Normally, members in character class are the characters
+        that you want to match for a position; if you specify a
+        circumflex (^) at the first position in side the brack, the
+        oposite meaning will result. In other words, any character except
+        newline that is not listed in the square brackets
+        will be matched.
+
+        [!] note that newline will not be matched in exclusion.
+            You don't need to specify the exclusion of newline
+            charector, it is excluded by default.
+
+            [!!] In awk, however, newline character is match
+
+        [!] note that circumflex has special meaning in Bourne shell,
+            be sure to include regEx in single quotes.
+
+
 
 
 

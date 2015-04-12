@@ -11,79 +11,32 @@ dot ( Wild card )
 
             This is the first line MATCH MATCH
             This is the second line MATCH MATCH
-            This is the last line MATCH MATCH
+            This is the final line MATCH MATCH
 
-        Despite that there is an end of line charector,
-        /MATCH./ will not match the "MATCH" at end of line.
-        However, if you turn on "Single-line" mode the second
-        "MATCH" at the end of lines will be matched.
+        Despite that there are end of line charectors at the end
+        of every line, /MATCH./ will not match the second "MATCH" in
+        the line.
 
-        ( in awk, /./ does match new line )
+        There is and option in some flavour of regEx called "Single-line"
+        mode. When this mode is on, all end of line chracters is ignored
+        until the final end of line character. Thus in the above example,
+        the second "MATCH" in first line and second line will
+        be matched.
 
-    Different between Unix shell and regEx's wild card:
+        ( in awk, /./ does match new line character)
+
+
+    The syntax between Unix shell's glob and regEx wild card:
 
         The shell's wild card "*" match any number of
         charactors.
 
-        regEx wild card "." match only match one charactor
-        The equivalent of shell's "*" in regEx is /.*/.
+        regEx wild card "." match only charactor.
+        The equivalent of shell's "*" in regEx is ".*"
 
-Bracket (Class)
---------------
-
-  • Bracket notation is used to enclose a list or set
-    of posible characters to be match at a single position.
-
-    This syntax is similar to shell's glob-pattern for filename.
-
-        $ grep '\.H[123]' ch0[12].html
-                   ^^^^^     ^^^^
-                   regEX     glob-pattern in filename
-                   in
-                   file-conetent
-
-            ch01:.H1 "Contents of Distribution Tape"
-            ch01:.H2 "Specifying Input Devices"
-            ch02:.H2 "Specifying Printers"
-            ch02:.H1 "Getting Started"
-               ^   ^
-
-        [!] note that you have to put regEx in quote so
-            that is is passed to grep un interpreted by the
-            shell.
-
-  • Similar to glob-pattern in shell, meta character
-    losses it meaning in bracket with the exception of:
-
-        "^"
-        "-"
-        "\"  (awk only)
-
-        Example:
-
-            /.[.]./  # match <anyChar>.<anyChar>
-
-            /[]]/   # match "]", first close bracket become member
-                      of the class
-
-    Hyphen (range of characters)
-
-        Allow you to specify a range of characters.
-
-        [!] Range [A-z] matches both uppercase and lowercase letters, but
-            it also matches the six characters that fall between uppercase
-            and lowercase letters in the ASCII chart:  [ \ ] ^ _'
-
-        [!] Range can be very messy when working with non-ASCII character
-            set or non English language.
-
-
-
-
-
-
-
-
+        In regEx, "*" is an quantifier, thus by itself is meaning
+        less. Quantifier require to act on an object to have
+        meaning.
 
 
 
