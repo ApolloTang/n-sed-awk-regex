@@ -1,0 +1,63 @@
+//<script src="http://localhost:8001/js/lib/underscore-1.4.4.js" ></script>
+//<script>
+
+
+    // To match meta characters, create regEx that looks like:
+    //      (\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\|\$|\^|\-)
+    var regExMatchMetaChar = '('
+        + '\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\')
+        + ')';
+	var regExObj_escapeMeta = new RegExp(regExMatchMetaChar, 'g');
+
+
+    /**
+    Escapes all meta charecters in a string, so that the resultant
+    string can be used in a regular expression.
+
+    @param   str {str} -String to escape.
+    @returns     {str} -String with all meta chacter escaped.
+    */
+    var _strMetaEscaped = function(str) {
+        return str.replace( regExObj_escapeMeta, '\\$1' );
+    };
+
+
+    /**
+    Builds a regular expression object that can search string interligently.
+
+    @param search          {string} -String to search for.
+    @param regex           {bool}   -Treat as a regular expression or not.
+    @param smart           {bool}   -Perform smart filtering or not.
+    @param caseInsensitive {bool}   -Do case insensitive matching or not.
+    @returns               {RegExp} -Constructed object.
+    @source jQuery DataTables v1.10.0's _fnFilterCreateSearch.
+    */
+    var regExObj_smartSearch = function(search, regex, smart, caseInsensitive) {
+        search = regex ? search : _strMetaEscaped(search);
+
+        if (smart) {
+            // Smart filtering will search string regardless of
+            // word's order usless search text is double qouted - a la google.
+            // This is what we want to generate:
+            //      ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$
+            var a = _.map(search.match( /"[^"]+"|[^ ]+/g ) || '', function (word) {
+                return word.charAt(0) === '"' ?
+                    word.match( /^"(.*)"$/ )[1] :
+                    word;
+            });
+            console.log(a);
+            search = '^(?=.*?'+a.join( ')(?=.*?' )+').*$';
+        }
+
+        return new RegExp(search, caseInsensitive ? 'i' : '');
+    };
+
+
+
+
+
+
+
+
+//</script>
+
