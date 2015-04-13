@@ -23,7 +23,8 @@
 
 
     /**
-    Builds a regular expression object that can search string interligently.
+    Builds a regular expression object that can be used to search
+    string interligently.
 
     @param search          {string} -String to search for.
     @param regex           {bool}   -Treat as a regular expression or not.
@@ -37,15 +38,16 @@
 
         if (smart) {
             // Smart filtering will search string regardless of
-            // word's order usless search text is double qouted - a la google.
-            // This is what we want to generate:
+            // word's order unless search text is double qouted - a la google.
+            // For example, this is what we want to generate:
             //      ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$
-            var a = _.map(search.match( /"[^"]+"|[^ ]+/g ) || '', function (word) {
-                return word.charAt(0) === '"' ?
-                    word.match( /^"(.*)"$/ )[1] :
-                    word;
+            // from the string:
+            //      one "two three" four
+            var a = _.map( search.match( /"[^"]+"|[^ ]+/g ) || '', function (word) {
+                return word.charAt(0) === '"'
+                    ? word.match( /^"(.*)"$/ )[1]
+                    : word;
             });
-            console.log(a);
             search = '^(?=.*?'+a.join( ')(?=.*?' )+').*$';
         }
 

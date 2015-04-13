@@ -1,0 +1,57 @@
+Lookaround
+==========
+
+Lookaround uses its subexpression to check the text, but only
+to find a location in the text at which it can be matched, not
+the actual text it matches.
+
+Lookaround constructs are similar to word-boundary metacharacters
+like \b or the anchors ^ and $ in that they don't match text, But
+lookaround is a much more general construct than the special
+case word boundary and anchors.
+
+
+lookahead
+---------
+lookahead peeks forward in the text (toward the right) to see
+if its subexpression can match, and is successful as a regex
+component if it can.
+
+Positive lookahead is specified with the special sequence (?=⋯),
+such as with (?=\d), which is successful at positions where a digit
+comes next.
+
+lookbehind
+----------
+lookbehind looks back (toward the left). It's given with the
+special sequence (?<=⋯), such as (?<=\d), which is successful
+at positions with a digit to the left (i.e., at positions after
+a digit).
+
+For example, given a string "abcdefghijk", lookahead:
+
+    (?=efg)
+
+will match the position between "d" and "e" in string such that
+/.(?=efg)/ will match "d" because "d" is located before
+the match position.
+
+On the other hand /(?=efg)./ will match "e" because "e" is located
+after the match position.
+
+As for lookbehind:
+
+    (?<=efg)
+
+will match the position between "g" and "h" that /.(?<=efg)/
+will match "g" because "g" is located before the match position.
+And /(?<=efg)./ will match "h" because "h" is located after
+the match positon.
+
+
+
+
+
+
+
+
