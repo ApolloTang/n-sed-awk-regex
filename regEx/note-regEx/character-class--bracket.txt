@@ -1,7 +1,7 @@
 ----------------------------------------------------------
 
-Bracket (Class)
---------------
+Bracket (Character Class)
+-------------------------
 
   • A Bracket pair "[]" is a class, and it match a single position.
 
@@ -97,7 +97,32 @@ Bracket (Class)
             be sure to include regEx in single quotes.
 
 
+    Distingtion between character class and alternation
+    ---------------------------------------------------
 
+        Although the gr[ea]y versus gr(a|e)y examples match the same
+        text, be careful not to confuse the concept of alternation with
+        that of a character class.  A character class can match just
+        a single character in the target text. With alternation, since
+        each alternative can be a full-fledged regular expression in
+        and of itself, each alternative can match an arbitrary amount
+        of text. Character classes are almost like their own special
+        mini-language (with their own ideas about metacharacters, for
+        example), while alternation is part of the "main" regular expression
+        language.
+
+
+
+Consider the following:
+
+    /^From|Subject|Date:./
+    /^(From|Subject|Date):./
+
+Both appear to match the same string, but they differs greatly.
+The first is composed of three alternatives, it matches: "^From"
+or "Subject" or "Date:." which is not particularly useful.
+If you want the leading caret and trailing dot apply to each
+alternative, we use parentheses to "constrain" the alternation.
 
 
 

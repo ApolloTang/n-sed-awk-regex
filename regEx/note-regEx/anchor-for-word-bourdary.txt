@@ -1,0 +1,15 @@
+word boudary anchors is available in egrep and vi
+
+Word boundary anchor other parts of the regular expression but
+don't actually consume any characters during a match (zero-width
+match).
+
+Word boundary is actually "alphanumeric sequence boundary"
+
+Uses metasequences: \<, \>
+
+\<cat\> matches the word cat
+\<cat   matches the word start with cat
+cat\>   matches the word end with cat
+
+

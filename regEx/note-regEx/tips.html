@@ -1,0 +1,14 @@
+Consider the following:
+
+    /^From|Subject|Date: ./
+    /^(From|Subject|Date): ./
+
+Both appear to matches lines beginning with "From: .", "Subject .",
+or "Date: .".  But the first one won't work -- the regEx is composed
+of three alternatives that match: "^From" or "Subject" or "Date: ."
+which is not particularly useful.  If you want the leading caret
+and trailing dot apply to each alternative, use parentheses to
+"constrain" the alternation.
+
+
+
