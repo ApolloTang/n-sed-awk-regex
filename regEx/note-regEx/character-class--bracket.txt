@@ -31,7 +31,11 @@ Bracket (Character Class)
 
         "^": Circumflex occurs in the first position.
         "-": Dash occurs in the first position.
-        "\": Backslash (awk only)
+        "\": Backslash  ( The POSIX and GNU flavors treat backslashes
+                          in character classes as literal characters.
+                          So with POSIX and GNU flavors, you can't escape
+                          anything in character classes. )
+        "]": Close bracket in the first position.
 
     For example, the following matches <anyChar>.<anyChar>:
 
@@ -54,9 +58,8 @@ Bracket (Character Class)
     a dash you have to place it immediately after open bracket like
     "[-" or before closing bracket like "-]"
 
-    [! awk only]
-
-        When using awk, backslash "\" maintains its meta meaning inside
+    For awk and non-POSIX nad non-GNU:
+        backslash "\" maintains its meta meaning inside
         a class. So if you need to match "-" or "]", you don't have to place
         it as the first or last item inside bracket:
 
