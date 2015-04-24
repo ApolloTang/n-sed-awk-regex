@@ -1,0 +1,44 @@
+
+:: Alternation and character class, thier different and similarity
+
+    Consider the following:
+
+        The class [abc]
+        and the alternation (a|b|c)
+
+    effectively mean the same thing, but the similarity in this example
+    does not extend to the general case.
+
+    A character class match exactly one character, no matter how
+    long or short the specified list of characters might be.
+
+    Alternation on the other hand, can have arbitrarily long alternatives
+    like:
+
+        \<(1,000,000|million|thousand thou)\>
+
+    Alternation, however, can't be negated like a character class.
+
+    ----
+
+    Consider the following:
+
+        /^From|Subject|Date: hello/
+        /^(From|Subject|Date): hello /
+
+    Both appear to matches lines beginning with
+
+        "From: hello", "Subject hello", or "Date: hello".
+
+    But the first one won't work -- the regEx is composed
+    of three alternatives that match:
+
+        "^From" or "Subject" or "Date: hello"
+
+    which is not particularly useful.
+
+    If you want the leading caret and trailing 'hello' apply
+    to each alternative, use parentheses to "constrain" the alternation.
+
+
+
