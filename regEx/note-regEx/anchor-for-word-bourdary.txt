@@ -1,8 +1,7 @@
 word boudary anchors is available in egrep and vi
 
-Word boundary anchor other parts of the regular expression but
-don't actually consume any characters during a match (zero-width
-match).
+Like ^ and $, Word boundary match position, they don't actually
+match any characters (zero-width match).
 
 Word boundary is actually "alphanumeric sequence boundary"
 
