@@ -1,0 +1,59 @@
+
+?  zero or once      read: the immediatly-preceding item must be matched exactly once.
+*  zero or more      read: immdiately-preceding item can be optional or any number of match.
++  one or more       read: immediatly-preceding item is not optional, and can be match any number of times.
+
+-----
+
+    optional  :
+
+        ?   : only once
+        *   : can be more than once
+
+    non optional :
+
+        {1} : only once
+        +   : can be more than once
+
+------
+
+    Repetition :
+
+        *   : more than once, optional
+        +   : more than once, non optional
+
+    non-repetition:
+
+        ?   : only once, optional
+        {1} : only once, non-optional
+
+----------------------------
+
+::: Some consideration on optional match
+
+    Considering matching "color" or "colour" with
+
+        /colou?r/
+
+    The "u?" in the regEx always result in succesful match.
+    The whole points of "optional match" is that it's successful
+    either way.
+
+::: Use quantifer to simplify alternation:
+
+    (July|Jul) can be expressed as (July?)
+
+::  Quantifier can attach after a parenthesized expression. Inside
+    the parentheses can be as complex a subexpression as you
+    like, but "from the outside" it is considered a single unit:
+
+        (4th|4) can be exressed as (4(th)?)
+        <HR(\s+SIZE\s*=\s*[0-9]+)?\s*>
+           ^^^^^^^^^^^^^^^^^^^^^^
+
+::: Quantifier also see preceeding character class as single unit:
+
+        [A-Z]?[0-9]?
+
+
+
