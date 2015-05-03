@@ -1,0 +1,128 @@
+Metacharacters Inside Character Classes
+=======================================
+
+In most regex flavors, the only special characters or metacharacters
+inside a character class are:
+
+    the closing bracket (]),
+    the backslash (\),
+    the caret (^),
+    and the hyphen (-).
+
+With the execptin of the above, the usual metacharacters are
+normal characters inside a character class, and do not need to
+be escaped by a backslash. So, to search for a star or plus, use:
+
+    [+*]
+
+Your regex will work fine if you escape the regular metacharacters
+inside a character class like:
+
+    [\+\*]
+
+but doing so significantly reduces readability.
+
+
+Blakslash
+---------
+
+    To include a backslash as a character without any special meaning
+    inside a character class, you have to escape it with another backslash.
+    For exanple:
+
+        [\\x] ## matches a backslash or an x.
+
+    The closing bracket (]), the caret (^) and the hyphen (-) can be
+    included by escaping them with a backslash:
+
+        [\]\^\-]
+
+    or by placing them in a position where they do not take on their
+    special meaning.
+
+        vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+        [!] In POSIX and GNU flavors you can not escape anything in
+            character classes.
+
+            POSIX and GNU flavor treats backslashes in character
+            classes as literal characters. So you can't escape
+            anything in character classes.
+
+            In these flavour, if want a caret as a literal, you need to
+            place it right after the opening bracket like:
+
+                [x^] ## matches an x or a caret.
+
+            not:
+
+                [^x] ## negating an x.
+
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Closing bracket
+---------------
+
+    You can include an unescaped closing bracket by placing:
+
+      • it right after the opening bracket:
+            []x]  ## matches a closing bracket or an x.
+
+      • or right after the negating caret:
+
+            [^]x] ## matches any character that is not a closing
+                     bracket or an x.
+
+
+        vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+        [!] Both JavaScript and Ruby require closing brackets to be escaped
+            with a backslash to include them as literals in a character class.
+
+              • JavaScript treats [] as an empty character class
+                that always fails to match, and [^] as a negated
+                empty character class that matches *any single character
+
+              • Ruby treats empty character classes as an error.
+
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Hyphen
+------
+
+    Hyphens at other positions in character classes form a range. In the situation
+    they can not form a range may be interpreted as literals or as errors. Regex
+    flavors are quite inconsistent about this.
+
+    The hyphen can be interpreted as literal when they are:
+
+      • right after the opening bracket:
+
+            [-x]
+
+      • right before the closing bracket, or
+
+            [x-]
+
+      • right after the negating caret.
+
+            [^-1234]
+
+    Both [-x] and [x-] match an x or a hyphen.
+    [^-x] match any character that is not an x or a hyphen.
+
+    This works in all flavors.
+
+Misc
+-----
+
+    Many regex tokens that work outside character classes can also
+    be used inside character classes. This includes character escapes
+    octal escapes, and hexadecimal escapes for non-printable characters.
+
+    For flavors that support Unicode, it also includes Unicode character escapes
+    and Unicode properties. [$\u20AC] matches a dollar or euro sign
+    assuming your regex flavor supports Unicode escapes.
+

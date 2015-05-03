@@ -2,26 +2,36 @@
 
 Parentheses are use to:
 
-  1. limit the scope of alternation:
+ 1. limit the scope of alternation:
 
-      (4th|forth)
+     (4th|forth)
 
-  2. group items into units to which you an apply quantifiers:
+ 2. group items into units to which you an apply quantifiers:
 
-      (4th|4) can be exressed as (4(th)?)
-      <HR(\s+SIZE\s*=\s*[0-9]+)?\s*>
+     (4th|4) can be exressed as (4(th)?)
+     <HR(\s+SIZE\s*=\s*[0-9]+)?\s*>
 
-  3. Back referencing
+ 3. Back referencing
 
-     Match new string that is the same as some string matched earlier
-     in the expression.
+    Match new string that is the same as some string matched earlier
+    in the expression.
 
-        ([a-z]+)\s+\1\b
+       ([a-z]+)\s+\1\b
 
-     the above matches two identical lower case word separated by one
-     or more space. the /\b/ in the makes sure that we are now at an
-     word boundary (not some thing like 'the theft')
+    The above matches two identical lower case word separated by one
+    or more space. the "\b" in the end makes sure that we are matching a
+    word boundary (not something like 'the theft')
 
+    multiple back referencing
+    -------------------------
+        you can have more than one set of parentheses in a regular expression
+        Use \1, \2, \3, etc., to refer to the first, second, third, etc
+        sets.
+
+        Pairs of parentheses are numbered by counting opening
+        parentheses from the left, so with ([a-z])([0-9])\1\2, the \1 refers
+        to the text matched by [a-z], and \2 refers to the text matched
+        by [0-9].
 
 
 
