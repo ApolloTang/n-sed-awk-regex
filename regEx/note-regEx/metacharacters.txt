@@ -1,0 +1,16 @@
+There are 12 characters with special meanings:
+
+the backslash \
+the caret ^
+the dollar sign $
+the period or dot .
+the vertical bar or pipe symbol |
+the question mark ?
+the asterisk or star *
+the plus sign +
+the opening parenthesis (
+the closing parenthesis )
+the opening square bracket [
+the opening curly brace {
+
+These special characters are often called "metacharacters"

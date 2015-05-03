@@ -1,0 +1,24 @@
+The 12 metacharacters characters:
+
+    the backslash \
+    the caret ^
+    the dollar sign $
+    the period or dot .
+    the vertical bar or pipe symbol |
+    the question mark ?
+    the asterisk or star *
+    the plus sign +
+    the opening parenthesis (
+    the closing parenthesis )
+    the opening square bracket [
+    the opening curly brace {
+
+lose their special meaning when preceed by a backspace.
+
+Backspace when used before a non-metacharacter, can produce
+different meanings depending upon the version of the program
+For example some versions treat \<, \>, \1, etc
+as metasequences.
+
+
+
