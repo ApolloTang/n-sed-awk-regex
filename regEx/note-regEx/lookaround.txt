@@ -11,6 +11,27 @@ lookaround is a much more general construct than the special
 case word boundary and anchors.
 
 
+
+         Name	              What it Does
+--------------------------------------------------------------------------
+(?=foo)	 Lookahead	          Asserts that what immediately follows the
+                              current position in the string is foo
+
+(?<=foo) Lookbehind	          Asserts that what immediately precedes
+                              the current position in the string is foo
+
+(?!foo)	 Negative Lookahead	  Asserts that what immediately follows the
+                              current position in the string is not foo
+
+(?<!foo) Negative Lookbehind  Asserts that what immediately precedes
+                              the current position in the string is not foo
+
+
+    ref: http://www.rexegg.com/regex-lookarounds.html
+
+
+
+
 lookahead
 ---------
 lookahead peeks forward in the text (toward the right) to see
@@ -49,6 +70,19 @@ And /(?<=efg)./ will match "h" because "h" is located after
 the match positon.
 
 
+
+----------------------------------------------------------
+
+Positive Lookahead
+------------------
+
+    q[^u]
+
+Does not match "iraq", but positive the look ahead
+
+    q(?=u)
+
+will match "iraq".
 
 
 
