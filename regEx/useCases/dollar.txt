@@ -1,0 +1,17 @@
+dollar amount (with optional cents)
+
+    \$[0-9]+(\.[0-9][0-9])?
+
+"a literal dollar sign, a bunch of one thing (one or more digit),
+and finally perhaps another thing (2 digits)."
+
+
+This example is a bit naïve for several reasons. It
+considers dollar amounts like $1000, but not $1,000. However, it
+does allow for optional cents, but frankly, that's not really
+very useful when applied with egrep. egrep never cares exactly
+how much is matched, but merely whether there is a match. Allowing
+something optional at the end never changes whether there's an
+overall match to begin with.
+
+

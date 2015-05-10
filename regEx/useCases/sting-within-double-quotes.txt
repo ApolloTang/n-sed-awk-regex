@@ -1,0 +1,8 @@
+Match a string within double quotes:
+
+    "[^"]*"
+
+
+
+
+
