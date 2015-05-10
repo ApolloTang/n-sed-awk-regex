@@ -1,0 +1,75 @@
+grep [options]  'regex'  [file...]
+
+grep prints the search results to the screen (stdout) and returns
+the following exit values:
+
+    0    A match was found.
+    1    No match was found.
+    >1   A syntax error was found or a file was inaccessible
+         (even if matches were found).
+
+common optoins:
+
+    -i ignore case
+    -v invert match
+    -c count the number of match
+    -l list the file w a match
+    -L list the file w NO match
+    -n show the line number where match occures
+    -h suppress the output of filenames
+    -E allow for iteration (quatifier)
+
+
+grep only support Basic reqular expressions (BRE). With BRE only
+six of the regular expressions metacharacter maintain thier special
+meaning:
+
+    ^ $ . [] * \
+
+The other 6 metacharacter loses their special meaning:
+
+    () {} | ? + -
+
+you need to excape them with backslash to have their meaning back.
+To save typing backslash on use extended grep:
+
+    $ grep -E
+    or
+    $ egrep
+
+
+in addition to egrep there is also fgrep and pgrep
+
+
+fgrep
+-----
+
+    fgrep or grep -F
+
+    is called the "fixed-string Global Regular Expression Print"
+    this is fixed or fast grep and behaves as grep but does NOT recognize
+    any regular expression meta-characters as being special. The
+    search will complete faster because it only processes a simple
+    string rather than a complex pattern.
+
+pgrep
+-----
+
+    stands for "Process-ID Global Regular Expressions Print".
+
+    pgrep looks through the currently running processes and lists
+    the process IDs which matches the selection criteria to stdout.
+
+    pgrep is handy when all you want to know is the process id integer
+    of a process. For example, if I wanted to know only the process
+    ID of my mysql process I would use the command
+
+        pgrep mysql
+
+    which would return a process ID like 7312.
+
+
+
+-------
+ref:
+http://superuser.com/questions/508881/what-is-the-difference-between-grep-pgrep-egrep-fgrep
