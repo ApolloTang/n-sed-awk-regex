@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>aa</title>
+    <title>Search User Input</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
@@ -15,7 +15,7 @@
 
 <body>
 <p>text</p>
-<textarea id="text" style="width: 100%"> the quick fox jump over the lazy dog </textarea>
+<textarea id="text" style="width: 100%">123 the quick fox jump over the lazy dog </textarea>
 <p>query</p>
 <textarea id="query" style="width: 100%"></textarea>
 
@@ -44,9 +44,13 @@ function search(searchQuery, text) {
 
 function generateRegExObj(searchQuery, flags) {
 	// Generate regular expression object that look like:
-    //      /^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$/flags
+    //      /^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour).*$/flags
     // which match a text string that contain given words regardless
     // of word order unless the words are double-quoted -- a la google.
+    //
+    // Note that the last "(?=)", "\b" is absence, this way a match can
+    // be found while user is in the middle of finishing typing
+    // the word
 
     // Separate word or quoted words into elements in array
     var matches = searchQuery.match( /"[^"]+"|[^ ]+/g ) || [];
@@ -59,9 +63,16 @@ function generateRegExObj(searchQuery, flags) {
     console.log('words: ', words);
 
     var generatedRegEx;
-    if (words.length !== 0) {
-        generatedRegEx = '^(?=.*?\\b' + words.join( '\\b)(?=.*?\\b' ) + '\\b).*$';
-        // generatedRegEx = '^(?=.*?' + words.join( ')(?=.*?' ) + ').*$';
+    if (words.length >= 2) {
+        var wordsLast = words.splice(words.length-1);
+        var wordsNotLast = words;
+        console.log('wordsNotLast: ', wordsNotLast);
+        console.log('wordsLast: ', wordsLast);
+        generatedRegEx = '^(?=.*?\\b' + wordsNotLast.join( '\\b)(?=.*?\\b' ) + '\\b)' + '(?=.*?\\b' + wordsLast + ').*$';
+    } else if (words.length === 1 ) {
+        var onlyWord = words;
+        console.log('onlyWord: ', onlyWord);
+        generatedRegEx = '^(?=.*?\\b' + onlyWord + ').*$';
     } else {
         generatedRegEx = '.^'; // match nothing
     }
