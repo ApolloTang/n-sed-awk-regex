@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>aa</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        /* css here */
+    </style>
+</head>
+
+<body>
+<p>text</p>
+<textarea id="text" style="width: 100%"> the quick fox jump over the lazy dog </textarea>
+<p>query</p>
+<textarea id="query" style="width: 100%"></textarea>
+
+
+<script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+<script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+<script>
+$('#text').on('keyup', function(e){
+    var query = $('#query').val();
+    _.debounce( function(){
+        search(query, e.target.value);
+    }, 500)();
+});
+
+$('#query').on('keyup', function(e){
+    var text = $('#text').val();
+    _.debounce( function(){
+        search(e.target.value, text);
+    }, 500)();
+});
+
+function search(searchQuery, text) {
+    console.log('text: ', text);
+    console.log('found: ', generateRegExObj(searchQuery).test(text) );
+}
+
+function generateRegExObj(searchQuery, flags) {
+	// Generate regular expression object that look like:
+    //      /^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$/flags
+    // which match a text string that contain given words regardless
+    // of word order unless the words are double-quoted -- a la google.
+
+    // Separate word or quoted words into elements in array
+    var matches = searchQuery.match( /"[^"]+"|[^ ]+/g ) || [];
+    var words = _.map( matches , function (word) {
+        var isQuoted = /"[^"]+"/.test(word);
+        return isQuoted
+            ? word.match( /^"(.*)"$/ )[1] // content captured btw quote
+            : word;
+    });
+    console.log('words: ', words);
+
+    var generatedRegEx;
+    if (words.length !== 0) {
+        generatedRegEx = '^(?=.*?\\b' + words.join( '\\b)(?=.*?\\b' ) + '\\b).*$';
+        // generatedRegEx = '^(?=.*?' + words.join( ')(?=.*?' ) + ').*$';
+    } else {
+        generatedRegEx = '.^'; // match nothing
+    }
+
+    var _flags = flags || 'gmi';
+    var generatedRegEx_obj = new RegExp(generatedRegEx, _flags);
+    console.log('generatedRegEx_obj: ', generatedRegEx_obj);
+    return generatedRegEx_obj;
+
+    // var generatedRegEx_escapedBackslash = generatedRegEx.replace( /\\/g , '\\\\' );
+    // console.log('generatedRegEx_escapedBackslash: ', generatedRegEx_escapedBackslash);
+
+    // var _regexTokens = [ '\b', '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ];
+    // var _regex_reEscape = new RegExp('(\\' + _regexTokens.join('|\\') + ')', 'g');
+    // var generatedRegEx_escaped = generatedRegEx.replace(_regex_reEscape, '\\\\$1' );
+    // console.log('generatedRegEx_escaped: ', generatedRegEx_escaped);
+}
+
+
+</script>
+
+</body>
+
+</html>
