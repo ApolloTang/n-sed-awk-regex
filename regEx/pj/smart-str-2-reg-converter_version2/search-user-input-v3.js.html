@@ -73,12 +73,12 @@ function generateRegExObj(searchQuery, flags) {
     var generatedRegEx;
     if (words.length >= 2) {
         // Generate regular expression string that look like:
-        //      /^(?=.*?(\s|^|#)the)(?=.*?(\s|^|#)fox)(?=.*?(\s|^|#)\$10\.00)(?=.*?(\s|^|#)#123).*$/
+        //      /^(?=.*?(\s|^|#)#123\s)(?=.*?(\s|^|#)the\s)(?=.*?(\s|^|#)fox\s)(?=.*?(\s|^|#)jump).*$/
         var wordLast = words.splice(words.length-1);
         var wordsBeforeLast = words;
         console.log('wordsBeforeLast: ', wordsBeforeLast);
         console.log('wordLast: ', wordLast);
-        generatedRegEx = '^(?=.*?(\\s|^|#)' + wordsBeforeLast.join( ')(?=.*?(\\s|^|#)' ) + '\\s)(?=.*?(\\s|^|#)' + wordLast + ').*$';
+        generatedRegEx = '^(?=.*?(\\s|^|#)' + wordsBeforeLast.join( '\\s)(?=.*?(\\s|^|#)' ) + '\\s)(?=.*?(\\s|^|#)' + wordLast + ').*$';
     } else if (words.length === 1 ) {
         // Generate regular expression string that look like:
         //      /^(?=.*?(\s|^|#)fox).*$/
