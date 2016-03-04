@@ -80,7 +80,7 @@ Positive Lookahead
 
 Does not match "iraq", but positive the look ahead
 
-    q(?=u)
+    q(?!u)
 
 will match "iraq".
 
