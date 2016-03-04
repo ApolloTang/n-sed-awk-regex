@@ -78,11 +78,13 @@ Positive Lookahead
 
     q[^u]
 
-Does not match "iraq", but positive the look ahead
+Does not match the "q" in "Iraq<eol>", the match will include
+the end of line charecter: "q<eol>". ( http://www.regular-expressions.info/charclass.html )
+However,
 
     q(?!u)
 
-will match "iraq".
+will match the "q" in  "Iraq<eol>".
 
 
 
