@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>aa</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        /* css here */
+    </style>
+</head>
+
+<body>
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+<script>
+var regExp = /(\d)(?=(?:\d{3})+(?!\d))/g;
+
+var string = 'asdf ;lkj asdf 1234567890 asb';
+
+var m = string.match(regExp);
+console.log('typeof match: ',  Object.prototype.toString.call(m));
+console.log('string.match() :\n ', m);
+
+console.log('- - - - - - - - - -');
+
+if (m) {
+    var numberOfMatch = m.length;
+    var i=0; var e;
+    for (; i<numberOfMatch; i++) {
+        e = regExp.exec(string);
+        console.log('regExp.exec()  i='+i+'   regExp.lastIndex=' + regExp.lastIndex + ' :\n', e);
+    }
+}
+
+console.log('- - - - - - - - - -');
+// var r = string.replace(regExp, '[$1|$2|$3|$4|$5|$6|$9]');
+var r = string.replace(regExp, '$1,');
+console.log('string.replace() :\n'+r);
+
+console.log('- - - - - - - - - -');
+console.log('original string : \n'+ string +'\n0123456789012345678901234567890\n0---------1---------2---------3');
+console.log(regExp);
+
+
+</script>
+
+</body>
+
+</html>
