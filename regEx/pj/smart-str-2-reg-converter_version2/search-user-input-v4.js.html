@@ -42,6 +42,7 @@ function search(searchQuery, text) {
     console.log('found: ', generateRegExObj(searchQuery).test(text) );
 }
 
+
 function generateRegExObj(searchQuery, flags) {
 	// Generate regular expression which match a text string that
     // contain given words regardless of word order unless the
@@ -50,64 +51,73 @@ function generateRegExObj(searchQuery, flags) {
     // is optional in the search query (123 will match #123)
     // -- Author: Apollo Tang
 
+    var debug = true;
+
     // Separate word or quoted words into elements in array
     // var matches = searchQuery.match( /"[^"]+"|[^ ]+/g ) || [];
-    var matches = searchQuery.match( /"[^"]+"|[^ #]+/g ) || [];
+    var matches = searchQuery.match( /"[^"]+"|[^ ]+/g ) || [];
 
-    // Remove double quotes and re-escape regex tokens
+    // Remove '"' and '#', then re-escape regex tokens
     var words = _.map( matches , function (item) {
+        var word;
         var isQuoted = /"[^"]+"/.test(item);
-        var word = isQuoted
-            ? item.match( /^"(.*)"$/ )[1] // content captured btw quote
-            : item;
-        console.log('word: ', word);
+        if (isQuoted) {
+            word = item.match( /^"(.*)"$/ )[1] // content captured btw quote
+        } else {
+            // remove '#' in the begining of word starting w digit
+            // this is done so that '#123' and '123' is the same thing in the query string
+            word = item.replace(/^#(\d.*)$/, '$1');
+        }
 
+        if (debug) console.log('word: ', word);
+
+        // Next we want to excape regEx token, this is because
+        // query string will become part of generated regEx
+        // and we want regEx token to be taken literary.
         var _regexTokens = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ];
         var _regexObj_reEscape = new RegExp('(\\' + _regexTokens.join('|\\') + ')', 'g');
         var word_regEx_escaped = word.replace(_regexObj_reEscape, '\\$1' );
-        console.log('word_regEx_escaped: ', word_regEx_escaped);
+
+        if (debug) console.log('word_regEx_escaped: ', word_regEx_escaped);
         return word_regEx_escaped;
     });
-    console.log('words: ', words);
+    if (debug) console.log('words: ', words);
 
-    // var start = '(\\s|^|#)';
-    // var end = '\\s';
-
-    // var start = '(\\b)';
-    // var end = '(\\b)';
-    // var finalEnd = '(\\b)';
-
+    // Generating RegExString
+    var generatedRegEx;
     var firstStart = '(\\s|^|#)';
     var start = '(\\s|^|#)';
     var end = '\\s';
     var finalEnd = '';
 
-    // Generating RegExString
-    var generatedRegEx;
     if (words.length >= 2) {
         // Generate regular expression string that look like:
-        //      /^(?=.*?(\s|^|#)#123\s)(?=.*?(\s|^|#)the\s)(?=.*?(\s|^|#)fox\s)(?=.*?(\s|^|#)jump).*$/
-        var wordLast = words.splice(words.length-1);
-        var wordsBeforeLast = words;
-        console.log('wordsBeforeLast: ', wordsBeforeLast);
-        console.log('wordLast: ', wordLast);
+        //  /^(?=.*?(\s|^|#)one\s)(?=.*?(\s|^|#)two\s)(?=.*?(\s|^|#)123\s)(?=.*?(\s|^|#)three).*$/gim
+        var wordLast = words.splice(words.length-1);  // we want to tread final word differently, because want to match it before a word is finish
+        var wordsBeforeLast = words; // array for words without final word
+
+        if (debug) console.log('wordsBeforeLast: ', wordsBeforeLast);
+        if (debug) console.log('wordLast: ', wordLast);
+
         generatedRegEx = '^(?=.*?'+firstStart+wordsBeforeLast.join(  end+')(?=.*?'+start ) + end+')(?=.*?'+start+wordLast+finalEnd+').*$';
 
     } else if (words.length === 1 ) {
         // Generate regular expression string that look like:
-        //      /^(?=.*?(\s|^|#)fox).*$/
+        //      /^(?=.*?(\s|^|#)one).*$/gim
         var onlyWord = words[0];
-        console.log('onlyWord: ', onlyWord);
+        if (debug) console.log('onlyWord: ', onlyWord);
         generatedRegEx = '^(?=.*?'+firstStart+onlyWord+finalEnd+').*$';
     } else {
         generatedRegEx = '.^'; // match nothing
     }
-    console.log('generatedRegEx: ', generatedRegEx);
+
+    if (debug) console.log('generatedRegEx: ', generatedRegEx);
 
     // Create RegExObject
     var _flags = flags || 'gmi';
     var generatedRegEx_obj = new RegExp(generatedRegEx, _flags);
-    console.log('generatedRegEx_obj: ', generatedRegEx_obj);
+
+    if (debug) console.log('generatedRegEx_obj: ', generatedRegEx_obj);
 
     return generatedRegEx_obj;
 }
