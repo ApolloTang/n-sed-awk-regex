@@ -44,8 +44,8 @@ function search(searchQuery, text) {
 
 
 function generateRegExObj(searchQuery, flags) {
-	// Generate regular expression which match a text string that
-    // contain given words regardless of word order unless the
+    // Generate regular expression to match a text string that
+    // contains given words regardless of word order unless the
     // words are double-quoted (a la google).
     //
     // Additionally, it allow searching for id where the leading "#"
@@ -57,11 +57,11 @@ function generateRegExObj(searchQuery, flags) {
     //      #123 the #qu#ick fox jump over the lazy $10.00 dog #1945
     //
     // -- Author: Apollo Tang
+    // -- Repo: git@github.com:ApolloTang/smart-query.git
 
     var debug = true;
 
     // Separate words or quoted words into elements in array
-    // var matches = searchQuery.match( /"[^"]+"|[^ ]+/g ) || [];
     var matches = searchQuery.match( /([^ ]*)"[^"]+"([^ ]*)|[^ ]+/g ) || [];
     if (debug) console.log('matches: ', matches);
 
@@ -69,7 +69,7 @@ function generateRegExObj(searchQuery, flags) {
     //      'one two "three four" aaa"bbb"ccc #123'
     // matches will look like:
     //      ["one", "two", ""three four"", "aaa"bbb"ccc", "#123"]
-    // We need to split the item "aaa"bbb"ccc" into aaa, "bbb", ccc.
+    // Next, we need to split the item "aaa"bbb"ccc" into aaa, "bbb", ccc.
     // To wit, we want matches2 to look like:
     //      ["one", "two", ""three four"", "aaa", ""bbb"", "ccc", "#123"]
 
@@ -93,9 +93,9 @@ function generateRegExObj(searchQuery, flags) {
     if (debug) console.log('matches2: ', matches2);
 
     // Now we have to deal with word that looks like:
-    //      #123, "The quick fox jump", "$10.00
+    //      #123, "The quick fox jump", $10.00
     // meaning, we need to remove '"' and '#', then re-escape regex tokens
-    // As a example, we have matches2:
+    // As a example, we have matches2 of the following:
     //      ["one", "two", "#123", ""The quick fox jump"", "$10.00"]
     // we transform it into:
     //      words = ["one", "two", "123", "The quick fox jump", "\$10\.00"]
@@ -108,8 +108,8 @@ function generateRegExObj(searchQuery, flags) {
             if (debug) console.log('item: ', item);
             word = item.match( /^"(.*)"$/ )[1] // content captured btw quote
         } else {
-            // remove '#' in the begining of word starting w digit
-            // this is done so that '#123' and '123' is the same thing in the query string
+            // Remove '#' in the begining of word starting w digit
+            // so that '#123' and '123' is the same thing in the query string
             word = item.replace(/^#(\d.*)$/, '$1');
         }
 
@@ -137,9 +137,8 @@ function generateRegExObj(searchQuery, flags) {
     if (words.length >= 2) {
         // Generate regular expression string that look like:
         //  /(?=.*?(\s|^|#)one)(?=.*?(\s|^|#)two)(?=.*?(\s|^|#)123)(?=.*?(\s|^|#)three).*$/gim
-        var wordLast = words.splice(words.length-1);  // we want to tread final word differently, because want to match it before a word is finish
+        var wordLast = words.splice(words.length-1);  // We have ability to treat final word differently, if we want to
         var wordsBeforeLast = words; // array for words without final word
-
         if (debug) console.log('wordsBeforeLast: ', wordsBeforeLast);
         if (debug) console.log('wordLast: ', wordLast);
 
