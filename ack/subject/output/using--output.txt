@@ -1,0 +1,46 @@
+
+
+"$&"
+    output the whole string matched by PATTERN
+
+    eg:
+        $cat text.txt
+        The quick brown fox jumps over the lazy dog
+        $ ack "\w*e\w*" text.txt --output="$&"
+        The
+        over
+        the
+
+"$`"
+    The string before the match.
+    [!] Note that you have to escape the back tick
+
+    eg:
+        $cat text.txt
+        The quick brown fox jumps over the lazy dog
+        $ ack "\w*e\w*" text.txt --output="$\`$&"
+
+        The quick brown fox jumps
+        The quick brown fox jumps over
+
+
+"$'"
+    The string after the match.
+    eg:
+
+        $cat text.txt
+        The quick brown fox jumps over the lazy dog
+        $ ack "\w*e\w*" text.txt --output="$'"
+         quick brown fox jumps over the lazy dog
+         the lazy dog
+         lazy dog
+
+    eg with $`, $&, $' together:
+
+        $ ack "\w*e\w*" text.txt --output="$\`>>$&<<$'"
+        >>The<< quick brown fox jumps over the lazy dog
+        The quick brown fox jumps >>over<< the lazy dog
+        The quick brown fox jumps over >>the<< lazy dog
+
+
+
